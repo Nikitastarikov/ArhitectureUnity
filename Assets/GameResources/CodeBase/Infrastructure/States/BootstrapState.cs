@@ -1,6 +1,8 @@
 ﻿using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Factory;
+using CodeBase.Infrastructure.PersistentProgress;
 using CodeBase.Infrastructure.Services;
+using CodeBase.Infrastructure.Services.SaveLoad;
 using CodeBase.Services.Inputs;
 using System;
 using UnityEngine;
@@ -28,13 +30,15 @@ namespace CodeBase.Infrastructure.States
             _sceneLoader.Load(START_SCENE_NAME, onLoaded: EnterLoadLevel);
         }
 
-        private void EnterLoadLevel() => _gameStateMachine.Enter<LoadLevelState, string>("Main");
+        private void EnterLoadLevel() => _gameStateMachine.Enter<LoadProgressState>();
 
         private void RegisterServices()
         {
             _services.RegisterSingle<IInputService>(InputService());
             _services.RegisterSingle<IAssets>(new AssetProvider());
+            _services.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
             _services.RegisterSingle<IGameFactory>(new GameFactory(AllServices.Container.Single<IAssets>()));
+            _services.RegisterSingle<ISaveLoadService>(new SaveLoadService(_services.Single<IPersistentProgressService>(), _services.Single<IGameFactory>()));
         }
 
         public void Exit()
