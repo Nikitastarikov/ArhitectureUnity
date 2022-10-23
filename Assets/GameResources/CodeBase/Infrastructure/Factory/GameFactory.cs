@@ -9,10 +9,15 @@ namespace CodeBase.Infrastructure.Factory
 {
     public class GameFactory : IGameFactory
     {
-        private readonly IAssets _assets;
+        public event Action onHeroCreated = delegate { };
 
         public List<ISavedProgressReader> ProgressReaders { get; } = new List<ISavedProgressReader>();
         public List<ISavedProgress> ProgressWriters { get; } = new List<ISavedProgress>();
+
+        public GameObject HeroGameObject => hero;
+
+        private GameObject hero;
+        private readonly IAssets _assets;
 
         public GameFactory(IAssets assets)
         {
@@ -22,8 +27,12 @@ namespace CodeBase.Infrastructure.Factory
         public void CreateHud() =>
             InstantiateRegistered(AssetPath.HUD_PATH);
 
-        public GameObject CreateHero(GameObject at) => 
-            InstantiateRegistered(AssetPath.HERO_PATH, at.transform.position);
+        public GameObject CreateHero(GameObject at)
+        {
+            hero = InstantiateRegistered(AssetPath.HERO_PATH, at.transform.position);
+            onHeroCreated();
+            return hero;
+        }
 
         public void Cleanup()
         {
