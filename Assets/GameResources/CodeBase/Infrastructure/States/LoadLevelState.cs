@@ -4,12 +4,15 @@ using CodeBase.Logic;
 using UnityEngine;
 using System;
 using CodeBase.Infrastructure.PersistentProgress;
+using CodeBase.UI;
+using CodeBase.Hero;
 
 namespace CodeBase.Infrastructure.States
 {
     internal partial class LoadLevelState : IPayloadedState<string>
     {
         private const string INITIAL_POINT_TAG = "InitialPoint";
+        private const string EnemySpawnerTag = "EnemySpawner";
 
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -52,10 +55,29 @@ namespace CodeBase.Infrastructure.States
 
         private void InitGameWorld()
         {
-            GameObject hero = _gameFactory.CreateHero(GameObject.FindWithTag(INITIAL_POINT_TAG));
+            InitSpawners();
 
-            _gameFactory.CreateHud();
+            GameObject hero = _gameFactory.CreateHero(GameObject.FindWithTag(INITIAL_POINT_TAG));
+            
+            InitHud(hero);
             CameraFollow(hero);
+        }
+
+        private void InitSpawners()
+        {
+            foreach (GameObject spawnerObject in GameObject.FindGameObjectsWithTag(EnemySpawnerTag))
+            {
+                var spawner = spawnerObject.GetComponent<EnemySpawner>();
+                _gameFactory.Register(spawner);
+            }
+        }
+
+        private void InitHud(GameObject hero)
+        {
+            GameObject hud = _gameFactory.CreateHud();
+
+            hud.GetComponent<ActorUI>().
+                Constructor(hero.GetComponent<IHealth>());
         }
 
         private void CameraFollow(GameObject hero)
