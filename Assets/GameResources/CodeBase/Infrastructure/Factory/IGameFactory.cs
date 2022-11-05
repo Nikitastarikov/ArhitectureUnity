@@ -16,7 +16,8 @@ namespace CodeBase.Infrastructure.Factory
         public List<ISavedProgressReader> ProgressReaders { get; }
 
         public void Cleanup();
-        public void CreateHud();
+        public GameObject CreateHud();
         public GameObject CreateHero(GameObject at);
+        public void Register(ISavedProgressReader progressReader);
     }
 }

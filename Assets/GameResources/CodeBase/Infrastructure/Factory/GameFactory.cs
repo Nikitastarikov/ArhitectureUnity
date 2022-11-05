@@ -24,7 +24,7 @@ namespace CodeBase.Infrastructure.Factory
             _assets = assets;
         }
 
-        public void CreateHud() =>
+        public GameObject CreateHud() =>
             InstantiateRegistered(AssetPath.HUD_PATH);
 
         public GameObject CreateHero(GameObject at)
@@ -38,6 +38,16 @@ namespace CodeBase.Infrastructure.Factory
         {
             ProgressReaders.Clear();
             ProgressWriters.Clear();
+        }
+
+        public void Register(ISavedProgressReader progressReader)
+        {
+            if (progressReader is ISavedProgress progressWriter)
+            {
+                ProgressWriters.Add(progressWriter);
+            }
+
+            ProgressReaders.Add(progressReader);
         }
 
         private GameObject InstantiateRegistered(string prefabPath, Vector3 position)
@@ -59,16 +69,6 @@ namespace CodeBase.Infrastructure.Factory
             {
                 Register(progressReader);
             }
-        }
-
-        private void Register(ISavedProgressReader progressReader)
-        {
-            if (progressReader is ISavedProgress progressWriter)
-            {
-                ProgressWriters.Add(progressWriter);
-            }
-
-            ProgressReaders.Add(progressReader);
         }
     }
 }
