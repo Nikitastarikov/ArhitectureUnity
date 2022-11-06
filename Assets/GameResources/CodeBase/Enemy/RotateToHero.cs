@@ -1,7 +1,4 @@
-﻿using CodeBase.Infrastructure.Factory;
-using CodeBase.Infrastructure.Services;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CodeBase.Enemy
 {
@@ -11,18 +8,12 @@ namespace CodeBase.Enemy
         private float _speed = 1f;
 
         private Transform _heroTransform;
-        private IGameFactory _factory;
+
         private Vector3 _positionToLook;
 
-        private void Start()
-        {
-            _factory = AllServices.Container.Single<IGameFactory>();
+        public void Constructor(Transform heroTransform) =>
+            _heroTransform = heroTransform;
 
-            if (HeroExists())
-                InitializeHeroTransform();
-            else
-                _factory.onHeroCreated += InitializeHeroTransform;
-        }
         private void Update()
         {
             if (Initialized())
@@ -51,13 +42,6 @@ namespace CodeBase.Enemy
         private float SpeedFactor() => 
             _speed * Time.deltaTime;
 
-        private bool HeroExists() =>
-            _factory.HeroGameObject != null;
-
         private bool Initialized() => _heroTransform != null;
-
-        private void InitializeHeroTransform() =>
-            _heroTransform = _factory.HeroGameObject.transform;
-
     }
 }
