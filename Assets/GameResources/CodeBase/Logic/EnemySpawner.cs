@@ -2,6 +2,9 @@ using CodeBase.Infrastructure.PersistentProgress;
 using CodeBase.Data;
 using UnityEngine;
 using System;
+using CodeBase.Infrastructure.Services;
+using CodeBase.Infrastructure.Factory;
+using CodeBase.Enemy;
 
 namespace CodeBase.Logic
 {
@@ -15,6 +18,8 @@ namespace CodeBase.Logic
         private bool _slain;
 
         private string _id;
+        private IGameFactory _factory;
+        private EnemyDeath _enemyDeath;
 
         public void LoadProgress(PlayerProgress progress)
         {
@@ -30,7 +35,12 @@ namespace CodeBase.Logic
 
         private void Spawn()
         {
+            var monster = _factory.CreateMonsters(MonsterTypeId, transform);
+            _enemyDeath = monster.GetComponent<EnemyDeath>();
+            _enemyDeath.onDeathHappened += Slay;
         }
+
+        private void Slay() => _slain = true;
 
         public void UpdateProgress(PlayerProgress progress)
         {
@@ -41,6 +51,13 @@ namespace CodeBase.Logic
         private void Awake()
         {
             _id = GetComponent<UniqueId>().Id;
+            _factory = AllServices.Container.Single<IGameFactory>();
+        }
+
+        private void OnDestroy()
+        {
+            if (_enemyDeath != null)
+                _enemyDeath.onDeathHappened -= Slay;
         }
     }
 }
