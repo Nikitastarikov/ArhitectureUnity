@@ -707,7 +707,7 @@ PrefabInstance:
     - target: {fileID: 2116561809828849317, guid: efefdee03d5618342b1448a243ca95e8,
         type: 3}
       propertyPath: MonsterTypeId
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3898447315333851208, guid: efefdee03d5618342b1448a243ca95e8,
         type: 3}
@@ -1428,7 +1428,7 @@ PrefabInstance:
     - target: {fileID: 196696890871348084, guid: 838c2175bd9474a4ca471d90bc34eae3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.44
+      value: 1.48
       objectReference: {fileID: 0}
     - target: {fileID: 196696890871348084, guid: 838c2175bd9474a4ca471d90bc34eae3,
         type: 3}
@@ -1438,7 +1438,7 @@ PrefabInstance:
     - target: {fileID: 196696890871348084, guid: 838c2175bd9474a4ca471d90bc34eae3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.33
+      value: -13.4
       objectReference: {fileID: 0}
     - target: {fileID: 196696890871348084, guid: 838c2175bd9474a4ca471d90bc34eae3,
         type: 3}
