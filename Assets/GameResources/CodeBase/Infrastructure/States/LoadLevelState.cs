@@ -2,10 +2,12 @@
 using CodeBase.CameraLogic;
 using CodeBase.Logic;
 using UnityEngine;
-using System;
 using CodeBase.Infrastructure.PersistentProgress;
 using CodeBase.UI;
-using CodeBase.Hero;
+using CodeBase.Data;
+using CodeBase.Enemy;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace CodeBase.Infrastructure.States
 {
@@ -56,12 +58,30 @@ namespace CodeBase.Infrastructure.States
         private void InitGameWorld()
         {
             InitSpawners();
+            InitLoot();
 
             GameObject hero = _gameFactory.CreateHero(GameObject.FindWithTag(INITIAL_POINT_TAG));
             
             InitHud(hero);
             CameraFollow(hero);
         }
+
+        private void InitLoot()
+        {
+            for (int i = 0; i < GetNotCollectedLoot().Count; i++)
+            {
+                if (CurrentLevel().Equals(GetNotCollectedLoot()[i].PositionOnLevel.Level))
+                {
+                    LootPiece loot = _gameFactory.CreateLoot();
+                }
+            }
+        }
+
+        private static string CurrentLevel() =>
+            SceneManager.GetActiveScene().name;
+
+        private List<LootOnLevel> GetNotCollectedLoot() =>
+            _progressService.Progress.KnokedOutLoot.NotCollectedLoot;
 
         private void InitSpawners()
         {

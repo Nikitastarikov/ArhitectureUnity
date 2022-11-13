@@ -17,21 +17,41 @@ namespace CodeBase.Infrastructure.Factory
 
         private GameObject hero;
         private readonly IStaticDataService _staticData;
+        private readonly IPersistentProgressService _progressService;
         private readonly IAssets _assets;
 
-        public GameFactory(IAssets assets, IStaticDataService staticData)
+        public GameFactory(IAssets assets, IStaticDataService staticData, IPersistentProgressService progressService)
         {
             _assets = assets;
             _staticData = staticData;
+            _progressService = progressService;
         }
 
-        public GameObject CreateHud() =>
-            InstantiateRegistered(AssetPath.HUD_PATH);
+        public GameObject CreateHud()
+        {
+            GameObject hud = InstantiateRegistered(AssetPath.HUD_PATH);
+
+            LootCounter lootCounter = hud.GetComponentInChildren<LootCounter>();
+            lootCounter.Constructor(_progressService.Progress.WorldData);
+            
+            Register(lootCounter);
+
+            return hud;
+        }
 
         public GameObject CreateHero(GameObject at)
         {
             hero = InstantiateRegistered(AssetPath.HERO_PATH, at.transform.position);
             return hero;
+        }
+
+        public LootPiece CreateLoot()
+        {
+            LootPiece lootPiece = InstantiateRegistered(AssetPath.LOOT_PATH).GetComponent<LootPiece>();
+
+            lootPiece.Constructor(_progressService.Progress.WorldData);
+
+            return lootPiece;
         }
 
         public GameObject CreateMonsters(MonsterTypeId typeId, Transform parent)
@@ -46,8 +66,12 @@ namespace CodeBase.Infrastructure.Factory
             monster.GetComponent<ActorUI>().Constructor(health);
             monster.GetComponent<AgentMoveToHero>().Constructor(hero.transform);
             monster.GetComponent<NavMeshAgent>().speed = monsterData.MoveSpeed;
-            Attack attack = monster.GetComponent<Attack>();
 
+            LootSpawner lootSpawner = monster.GetComponentInChildren<LootSpawner>();
+            lootSpawner.SetLoot(monsterData.MinLoot, monsterData.MaxLoot);
+            lootSpawner.Constructor(this);
+
+            Attack attack = monster.GetComponent<Attack>();
             attack.Constructor(hero.transform);
             attack.Damage = monsterData.Damage;
             attack.EffectiveDistance = monsterData.EffectiveDistance;
