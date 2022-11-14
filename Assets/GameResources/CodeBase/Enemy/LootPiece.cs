@@ -6,6 +6,9 @@ using UnityEngine;
 using CodeBase.Logic;
 using System;
 using UnityEngine.SceneManagement;
+using CodeBase.Services;
+using CodeBase.Infrastructure.Services.SaveLoad;
+using CodeBase.Infrastructure.Factory;
 
 namespace CodeBase.Enemy
 {
@@ -29,9 +32,13 @@ namespace CodeBase.Enemy
         private string _id = string.Empty;
         private bool _isGet = false;
         private WorldData _worldData;
+        private IGameFactory _factory;
 
-        public void Constructor(WorldData worldData) => 
+        public void Constructor(WorldData worldData, IGameFactory factory)
+        {
             _worldData = worldData;
+            _factory = factory;
+        }
 
         public void Initialize(Loot loot) => 
             _loot = loot;
@@ -57,6 +64,9 @@ namespace CodeBase.Enemy
 
         private void Awake() => 
             _id = GetComponent<UniqueId>().Id;
+
+        private void OnDestroy() => 
+            _factory.Unregister(this);
 
         private void OnTriggerEnter(Collider other) => Pickup();
 

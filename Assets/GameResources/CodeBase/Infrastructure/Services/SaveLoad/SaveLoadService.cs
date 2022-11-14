@@ -1,5 +1,6 @@
 ﻿using CodeBase.Infrastructure.PersistentProgress;
 using CodeBase.Infrastructure.Factory;
+using CodeBase.Services;
 using CodeBase.Data;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace CodeBase.Infrastructure.Services.SaveLoad
         {
             foreach (ISavedProgress progressWriter in _gameFactory.ProgressWriters)
             {
-                progressWriter.UpdateProgress(_progressService.Progress);
+                progressWriter?.UpdateProgress(_progressService.Progress);
             }
 
             PlayerPrefs.SetString(PROGRESS_KEY, _progressService.Progress.ToJson());

@@ -1,4 +1,4 @@
-﻿namespace CodeBase.Logic
+﻿namespace CodeBase.StaticData
 {
     public enum MonsterTypeId
     {

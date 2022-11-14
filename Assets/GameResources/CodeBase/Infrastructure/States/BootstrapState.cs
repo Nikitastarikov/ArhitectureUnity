@@ -5,6 +5,7 @@ using CodeBase.Infrastructure.Services;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Services.Inputs;
 using CodeBase.StaticData;
+using CodeBase.Services;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.States
