@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: EarthGolemStaticData
   m_EditorClassIdentifier: 
   MonsterTypeId: 1
+  MaxLoot: 10
+  MinLoot: 1
   Hp: 10
   Damage: 3
   EffectiveDistance: 1

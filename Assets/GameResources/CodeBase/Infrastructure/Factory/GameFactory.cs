@@ -1,7 +1,9 @@
 ﻿using CodeBase.Infrastructure.PersistentProgress;
 using CodeBase.Infrastructure.AssetManagement;
+using CodeBase.Logic.EnemySpawners;
 using System.Collections.Generic;
 using CodeBase.StaticData;
+using CodeBase.Services;
 using CodeBase.Logic;
 using CodeBase.Enemy;
 using UnityEngine.AI;
@@ -49,7 +51,7 @@ namespace CodeBase.Infrastructure.Factory
         {
             LootPiece lootPiece = InstantiateRegistered(AssetPath.LOOT_PATH).GetComponent<LootPiece>();
 
-            lootPiece.Constructor(_progressService.Progress.WorldData);
+            lootPiece.Constructor(_progressService.Progress.WorldData, this);
 
             return lootPiece;
         }
@@ -82,6 +84,16 @@ namespace CodeBase.Infrastructure.Factory
             return monster;
         }
 
+        public void CreateEnemySpawner  (Vector3 at, string spawnerId, MonsterTypeId monsterTypeId)
+        {
+            EnemySpawnPoint spawner = InstantiateRegistered(AssetPath.ENEMY_SPAWNER, at)
+                .GetComponent<EnemySpawnPoint>();
+
+            spawner.Constructor(this);
+            spawner.Id = spawnerId;
+            spawner.MonsterTypeId = monsterTypeId;
+        }
+
         public void Cleanup()
         {
             ProgressReaders.Clear();
@@ -96,6 +108,16 @@ namespace CodeBase.Infrastructure.Factory
             }
 
             ProgressReaders.Add(progressReader);
+        }
+
+        public void Unregister(ISavedProgressReader progressReader)
+        {
+            if (progressReader is ISavedProgress progressWriter)
+            {
+                ProgressWriters.Remove(progressWriter);
+            }
+
+            ProgressReaders.Remove(progressReader);
         }
 
         private GameObject InstantiateRegistered(string prefabPath, Vector3 position)

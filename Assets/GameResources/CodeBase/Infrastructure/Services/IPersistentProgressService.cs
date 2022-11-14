@@ -1,7 +1,7 @@
 ﻿using CodeBase.Infrastructure.Services;
 using CodeBase.Data;
 
-namespace CodeBase.Infrastructure.PersistentProgress
+namespace CodeBase.Services
 {
     public interface IPersistentProgressService : IService
     {
