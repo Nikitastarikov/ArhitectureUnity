@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using CodeBase.Hero;
 using CodeBase.Logic;
 
-namespace CodeBase.UI
+namespace CodeBase.UI.Elements
 {
     public class ActorUI : MonoBehaviour
     {

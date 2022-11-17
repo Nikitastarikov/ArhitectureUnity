@@ -1,14 +1,18 @@
 ﻿using CodeBase.Infrastructure.PersistentProgress;
+using CodeBase.Infrastructure.StaticData;
 using CodeBase.Infrastructure.Factory;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using CodeBase.UI.Elements;
 using CodeBase.CameraLogic;
+using CodeBase.StaticData;
 using CodeBase.Services;
 using CodeBase.Enemy;
 using CodeBase.Logic;
 using CodeBase.Data;
-using CodeBase.UI;
 using UnityEngine;
+using System;
+using CodeBase.UI.Services.Factory;
 
 namespace CodeBase.Infrastructure.States
 {
@@ -22,13 +26,15 @@ namespace CodeBase.Infrastructure.States
         private readonly IGameFactory _gameFactory;
         private readonly IPersistentProgressService _progressService;
         private readonly IStaticDataService _staticDataService;
+        private readonly IUIFactoy _uiFactory;
 
-        public LoadLevelState(GameStateMachine gameStateMachine, 
-            SceneLoader sceneLoader, 
-            LoadingCurtain curtain, 
-            IGameFactory gameFactory, 
-            IPersistentProgressService progressService, 
-            IStaticDataService staticDataService)
+        public LoadLevelState(GameStateMachine gameStateMachine,
+            SceneLoader sceneLoader,
+            LoadingCurtain curtain,
+            IGameFactory gameFactory,
+            IPersistentProgressService progressService,
+            IStaticDataService staticDataService,
+            IUIFactoy uiFactory)
         {
             _stateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
@@ -36,6 +42,7 @@ namespace CodeBase.Infrastructure.States
             _gameFactory = gameFactory;
             _progressService = progressService;
             _staticDataService = staticDataService;
+            _uiFactory = uiFactory;
         }
         public void Enter(string payload)
         {
@@ -48,11 +55,15 @@ namespace CodeBase.Infrastructure.States
 
         private void OnLoaded()
         {
+            InitUIRoot();
             InitGameWorld();
             InformProgressReaders();
 
             _stateMachine.Enter<GameLoopState>();
         }
+
+        private void InitUIRoot() => 
+            _uiFactory.CreateUIRoot();
 
         private void InformProgressReaders()
         {
@@ -93,7 +104,7 @@ namespace CodeBase.Infrastructure.States
         private void InitSpawners()
         {
             string sceneKey = SceneManager.GetActiveScene().name;
-            StaticData.LevelStaticData levelData = _staticDataService.ForLevel(sceneKey);
+            LevelStaticData levelData = _staticDataService.ForLevel(sceneKey);
 
             foreach (var spawnerData in levelData.EnemySpawners)
             {

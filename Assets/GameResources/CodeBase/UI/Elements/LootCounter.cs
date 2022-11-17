@@ -1,11 +1,10 @@
-﻿using CodeBase.Data;
+﻿using CodeBase.Infrastructure.PersistentProgress;
+using CodeBase.Data;
 using UnityEngine;
 using TMPro;
-using CodeBase.Infrastructure.PersistentProgress;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 using System;
 
-namespace CodeBase.UI
+namespace CodeBase.UI.Elements
 {
     public class LootCounter : MonoBehaviour, ISavedProgress
     {
