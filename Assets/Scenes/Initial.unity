@@ -153,7 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -196,6 +195,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4807271499447365920, guid: e3b9cf0498a104a4c9f9d2d2cce713c4,
@@ -264,6 +264,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5664292257512196717}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: e3b9cf0498a104a4c9f9d2d2cce713c4, type: 3}
 --- !u!1 &1327540279
 GameObject:
@@ -354,6 +355,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5754897031443806362, guid: fc239b54640df624c9c679ee1a8a19c1,
@@ -467,6 +469,7 @@ PrefabInstance:
       value: Curtain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: fc239b54640df624c9c679ee1a8a19c1, type: 3}
 --- !u!114 &5664292257512196717 stripped
 MonoBehaviour:
