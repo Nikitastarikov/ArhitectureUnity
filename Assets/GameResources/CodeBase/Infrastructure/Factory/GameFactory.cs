@@ -51,9 +51,9 @@ namespace CodeBase.Infrastructure.Factory
             return hud;
         }
 
-        public GameObject CreateHero(GameObject at)
+        public GameObject CreateHero(Vector3 at)
         {
-            hero = InstantiateRegistered(AssetPath.HERO_PATH, at.transform.position);
+            hero = InstantiateRegistered(AssetPath.HERO_PATH, at);
             return hero;
         }
 

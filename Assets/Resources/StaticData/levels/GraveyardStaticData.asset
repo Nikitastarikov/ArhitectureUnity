@@ -20,3 +20,4 @@ MonoBehaviour:
   - Id: Main_f19bec51-375c-4237-a359-cf3c807888b0
     MonsterTypeId: 0
     Position: {x: -12.2, y: -0.0000019073486, z: -14.74}
+  InitialHeroPosition: {x: 9.3, y: 1.24, z: -13.93}
