@@ -16,15 +16,14 @@ namespace CodeBase.UI.Elements
         {
             _worldData = worldData;
             _worldData.LootData.Changed += UpdateCounter;
+
+            UpdateCounter();
         }
         public void LoadProgress(PlayerProgress progress) =>
             _counter.text = $"{progress.WorldData.LootData.Collected}";
 
         public void UpdateProgress(PlayerProgress progress) =>
-            progress.WorldData.LootData.Collected = Int32.Parse(_counter.text);
-
-        private void Start() => 
-            UpdateCounter();
+            progress.WorldData.LootData.Collected = Int32.Parse(_counter.text);            
 
         private void UpdateCounter() => 
             _counter.text = $"{_worldData.LootData.Collected}";

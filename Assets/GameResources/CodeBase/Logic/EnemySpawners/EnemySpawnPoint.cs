@@ -42,11 +42,10 @@ namespace CodeBase.Logic.EnemySpawners
                 _enemyDeath.onDeathHappened -= Slay;
         }
 
-        private void Spawn()
+        private async void Spawn()
         {
-            _enemyDeath = _factory
-                .CreateMonsters(MonsterTypeId, transform).
-                GetComponent<EnemyDeath>();
+            GameObject monster = await _factory.CreateMonsters(MonsterTypeId, transform);
+            _enemyDeath = monster.GetComponent<EnemyDeath>();
             _enemyDeath.onDeathHappened += Slay;
         }
 
