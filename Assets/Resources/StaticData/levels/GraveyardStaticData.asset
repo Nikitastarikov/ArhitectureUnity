@@ -17,6 +17,9 @@ MonoBehaviour:
   - Id: Main_f19bec51-375c-4237-a359-cf3c807888b0
     MonsterTypeId: 0
     Position: {x: -12.2, y: -0.0000019073486, z: -14.74}
+  - Id: Main_3768d5da-0bc6-4a1d-922c-c8b13796a91f
+    MonsterTypeId: 1
+    Position: {x: 10.474361, y: -0.0000015497208, z: -7.0318446}
   - Id: Main_88cb0efb-fb21-46ad-8732-40eb6ff65f8a
     MonsterTypeId: 0
     Position: {x: -16.13564, y: 1.2082624, z: -6.0018444}
