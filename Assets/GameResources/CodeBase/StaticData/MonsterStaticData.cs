@@ -1,3 +1,4 @@
+using UnityEngine.AddressableAssets;
 using UnityEngine;
 
 namespace CodeBase.StaticData
@@ -26,6 +27,6 @@ namespace CodeBase.StaticData
 
         [Range(1f, 10f)]
         public float MoveSpeed = 1f;
-        public GameObject Prefab;
+        public AssetReferenceGameObject PrefabReference;
     }
 }

@@ -1,8 +1,10 @@
 ﻿using CodeBase.Infrastructure.PersistentProgress;
 using CodeBase.Infrastructure.StaticData;
 using CodeBase.Infrastructure.Factory;
+using CodeBase.UI.Services.Factory;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CodeBase.UI.Elements;
 using CodeBase.CameraLogic;
 using CodeBase.StaticData;
@@ -11,15 +13,11 @@ using CodeBase.Enemy;
 using CodeBase.Logic;
 using CodeBase.Data;
 using UnityEngine;
-using System;
-using CodeBase.UI.Services.Factory;
 
 namespace CodeBase.Infrastructure.States
 {
     internal partial class LoadLevelState : IPayloadedState<string>
     {
-        private const string INITIAL_POINT_TAG = "InitialPoint";
-
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly LoadingCurtain _curtain;
@@ -48,77 +46,79 @@ namespace CodeBase.Infrastructure.States
         {
             _curtain.Show();
             _gameFactory.Cleanup();
+            _gameFactory.WarmUp();
             _sceneLoader.Load(payload, OnLoaded);
         }
 
         public void Exit() => _curtain.Hide();
 
-        private void OnLoaded()
+        private async void OnLoaded()
         {
-            InitUIRoot();
-            InitGameWorld();
+            await InitUIRoot();
+            await InitGameWorld();
             InformProgressReaders();
 
             _stateMachine.Enter<GameLoopState>();
         }
 
-        private void InitUIRoot() => 
-            _uiFactory.CreateUIRoot();
+        private async Task InitUIRoot() => 
+            await _uiFactory.CreateUIRoot();
 
         private void InformProgressReaders()
         {
             foreach (ISavedProgressReader progressReader in _gameFactory.ProgressReaders)
-            {
                 progressReader.LoadProgress(_progressService.Progress);
-            }
         }
 
-        private void InitGameWorld()
+        private async Task InitGameWorld()
         {
-            InitSpawners();
-            InitLoot();
+            LevelStaticData levelData = LevelStaticData();
 
-            GameObject hero = _gameFactory.CreateHero(GameObject.FindWithTag(INITIAL_POINT_TAG));
-            
-            InitHud(hero);
+            await InitSpawners(levelData);
+            await InitLoot();
+            GameObject hero = await InitHero(levelData);
+            await InitHud(hero);
             CameraFollow(hero);
         }
 
-        private void InitLoot()
+        private async Task<GameObject> InitHero(LevelStaticData levelData) =>
+            await _gameFactory.CreateHero(levelData.InitialHeroPosition);
+
+        private async Task InitLoot()
         {
             for (int i = 0; i < GetNotCollectedLoot().Count; i++)
             {
                 if (CurrentLevel().Equals(GetNotCollectedLoot()[i].PositionOnLevel.Level))
                 {
-                    LootPiece loot = _gameFactory.CreateLoot();
+                    LootPiece loot = await _gameFactory.CreateLoot();
                 }
             }
         }
+
+        private async Task InitSpawners(LevelStaticData levelData)
+        {
+            foreach (EnemySpawnerData spawnerData in levelData.EnemySpawners)
+            {
+                await _gameFactory.CreateEnemySpawner(spawnerData.Position, spawnerData.Id, spawnerData.MonsterTypeId);
+            }
+        }
+
+        private async Task InitHud(GameObject hero)
+        {
+            GameObject hud = await _gameFactory.CreateHud();
+
+            hud.GetComponent<ActorUI>().
+                Constructor(hero.GetComponent<IHealth>());
+        }
+
+        private LevelStaticData LevelStaticData() => 
+            _staticDataService.ForLevel(SceneManager.GetActiveScene().name);
 
         private static string CurrentLevel() =>
             SceneManager.GetActiveScene().name;
 
         private List<LootOnLevel> GetNotCollectedLoot() =>
             _progressService.Progress.KnokedOutLoot.NotCollectedLoot;
-
-        private void InitSpawners()
-        {
-            string sceneKey = SceneManager.GetActiveScene().name;
-            LevelStaticData levelData = _staticDataService.ForLevel(sceneKey);
-
-            foreach (var spawnerData in levelData.EnemySpawners)
-            {
-                _gameFactory.CreateEnemySpawner(spawnerData.Position, spawnerData.Id, spawnerData.MonsterTypeId);
-            }
-        }
-
-        private void InitHud(GameObject hero)
-        {
-            GameObject hud = _gameFactory.CreateHud();
-
-            hud.GetComponent<ActorUI>().
-                Constructor(hero.GetComponent<IHealth>());
-        }
 
         private void CameraFollow(GameObject hero)
         {

@@ -4,7 +4,7 @@ using System;
 
 namespace CodeBase.Infrastructure.Services.Ads
 {
-    public class AdsService : IAdsService, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
+    public class AdsService : IAdsService, IUnityAdsLoadListener, IUnityAdsShowListener
     {
         public event Action onLoadedAds;
         public bool IsAdsLoaded => isAdsLoaded;
@@ -22,6 +22,9 @@ namespace CodeBase.Infrastructure.Services.Ads
 
         public void Initialize()
         {
+#if UNITY_EDITOR
+            _gameId = ANDROID_GAME_ID;
+#else
 
             switch (Application.platform)
             {
@@ -35,12 +38,8 @@ namespace CodeBase.Infrastructure.Services.Ads
                     Debug.LogError("Unsupported platform for ads");
                     break;
             }
-
-            if (!_gameId.Equals(string.Empty))
-            {
-                Advertisement.Initialize(_gameId, true, this);
-                Advertisement.Load(_gameId, this);
-            }
+#endif
+            Advertisement.Load(_gameId, this);
         }
 
         public void ShowReWardedAds(Action onAdsFinished)   
