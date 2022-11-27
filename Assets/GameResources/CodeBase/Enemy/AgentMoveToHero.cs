@@ -1,6 +1,4 @@
 ﻿using CodeBase.Infrastructure.Factory;
-using CodeBase.Infrastructure.Services;
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 

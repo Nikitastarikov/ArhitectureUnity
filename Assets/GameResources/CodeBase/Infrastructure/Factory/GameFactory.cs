@@ -1,12 +1,9 @@
-﻿using UnityEngine.ResourceManagement.AsyncOperations;
-using CodeBase.Infrastructure.PersistentProgress;
+﻿using CodeBase.Infrastructure.PersistentProgress;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.StaticData;
-using UnityEngine.AddressableAssets;
 using CodeBase.UI.Services.Windows;
 using CodeBase.Logic.EnemySpawners;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 using System.Threading.Tasks;
 using CodeBase.UI.Elements;
 using CodeBase.StaticData;
@@ -15,7 +12,6 @@ using CodeBase.Logic;
 using CodeBase.Enemy;
 using UnityEngine.AI;
 using UnityEngine;
-using System.Net;
 
 namespace CodeBase.Infrastructure.Factory
 {
