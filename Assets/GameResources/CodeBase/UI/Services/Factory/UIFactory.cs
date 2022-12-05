@@ -35,7 +35,7 @@ namespace CodeBase.UI.Services.Factory
 
         public async Task CreateUIRoot()
         {
-            GameObject prefab = await _assets.Load<GameObject>(UI_ROOT);
+            GameObject prefab = await _assets.Instantiate(UI_ROOT);
             _uiRoot = prefab.transform;
         }
 
