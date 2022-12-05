@@ -1,16 +1,23 @@
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace CodeBase.Services.Inputs
 {
-    public abstract class InputService : IInputService
+    public class InputService : IInputService
     {
-        protected const string HORIZONTAL_STR = "Horizontal";
-        protected const string VERTICAL_STR = "Vertical";
-        private const string FIRE_STR = "Fire";
-        public abstract Vector2 Axis { get; }
-        public bool IsAttackButtonUp() => SimpleInput.GetButtonUp(FIRE_STR);
+        public virtual Vector2 Axis => _input.Player.Move.ReadValue<Vector2>();
 
-        protected static Vector2 SimpleInputAxis() => 
-            new Vector2(SimpleInput.GetAxis(HORIZONTAL_STR), SimpleInput.GetAxis(VERTICAL_STR));
+        protected PlayerInput _input;
+
+        public InputService()
+        {
+            _input = new PlayerInput();
+
+            _input.Enable();
+        }
+
+        public virtual bool IsAttackButtonUp() => _input.Player.Attack.IsPressed();
+
+        ~InputService() => _input.Disable();
     }
 }

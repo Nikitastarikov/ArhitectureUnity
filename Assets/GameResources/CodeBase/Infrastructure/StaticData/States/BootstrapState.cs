@@ -86,16 +86,6 @@ namespace CodeBase.Infrastructure.States
         {
         }
 
-        private static IInputService InputService()
-        {
-            if (Application.isEditor)
-            {
-                return new StandaloneInputService();
-            }
-            else
-            {
-                return new MobileInputService();
-            }
-        }
+        private IInputService InputService() => new InputService();
     }
 }
